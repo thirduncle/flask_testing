@@ -4,7 +4,7 @@ on: push
 
 jobs:
   deploy:
-    name: Deploy to K8s
+    name: Deploy to K8s.
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
