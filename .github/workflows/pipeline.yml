@@ -17,4 +17,4 @@ jobs:
       #- name: Use context
       #  run: kubectl config use-context kubernetes-admin@kubernetes
       - name: Test output
-        run: kubectl --insecure-skip-tls-verify get nodes --v=6
+        run: kubectl get nodes --v=6
