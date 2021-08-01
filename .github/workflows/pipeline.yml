@@ -14,7 +14,7 @@ jobs:
           mkdir ${HOME}/.kube
           echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > ${HOME}/.kube/config
           cat ${HOME}/.kube/config
-      - name: Use context
-        run: kubectl config use-context kubernetes-admin@kubernetes
+      #- name: Use context
+      #  run: kubectl config use-context kubernetes-admin@kubernetes
       - name: Test output
-        run: kubectl get nodes
+        run: kubectl --insecure-skip-tls-verify get nodes --v=6
