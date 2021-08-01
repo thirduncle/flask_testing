@@ -1,19 +1,20 @@
-name: Python Pipeline
+name: K8s Pipeline
 
 on: push
 
 jobs:
-  test:
+  deploy:
+    name: Deploy to K8s
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: python webapp/app.py
-  build:
-    needs: [test]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/upload-artifact@v2
-        with:
-          name: hello
-          path: .
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create kubeconfig
+        run: |
+          mkdir ${HOME}/.kube
+          echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > ${HOME}/.kube/config
+          cat ${HOME}/.kube/config
+      - name: Use context
+        run: kubectl config use-context kubernetes-admin@kubernetes
+      - name: Test output
+        run: kubectl get nodes
