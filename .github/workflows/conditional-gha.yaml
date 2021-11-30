@@ -1,0 +1,33 @@
+name: Test kubectl
+on:
+  push:
+    branches: [ buildah ]
+
+jobs:
+  test_outcome:
+    runs-on: [ ubuntu-latest ]
+    steps:
+    - name: Step 1
+      id: step-1
+      run: |
+        echo 'Test success'
+        ls -la /tmp
+      continue-on-error: true
+#    - name: Step 2
+#      id: step-2
+#      run: |
+#        echo 'Test failure'
+#        ls -la /tmp
+#      continue-on-error: true
+    - name: Check success
+      if: steps.step-1.outcome == 'success'
+      run: echo '✅ Step 1 successfull'
+#    - name: Check success
+#      if: steps.step-1.outcome == 'success' && steps.step-2.outcome == 'success'
+#      run: echo '✅ Both steps successfull'
+    - name: Check failure
+      if: steps.step-1.outcome != 'success' || steps.step-2.outcome != 'success'
+      run: echo 'Something failed'
+
+
+
