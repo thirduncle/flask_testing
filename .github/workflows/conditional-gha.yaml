@@ -1,7 +1,7 @@
 name: Test kubectl
 on:
   push:
-    branches: [ buildah ]
+    branches: [ none ]
 
 jobs:
   test_outcome:

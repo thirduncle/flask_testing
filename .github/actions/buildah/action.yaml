@@ -1,0 +1,26 @@
+name: "Buildah Build & Push Action"
+description: "Build images with buildah and push to Harbor"
+
+inputs:
+  tags:
+    description: "Harbor project name"
+    required: true
+    default: latest
+    #default: '["0.1", "0.2", "latest"]'
+
+runs:
+  using: composite
+  steps:
+    - name: List tags
+      shell: bash
+      run: |
+        echo "1 ${{ inputs.tags }}"
+        echo "2 '${{ inputs.tags }}'"
+        jq -rc '.[]' <<< $(echo '${{ inputs.tags }}') | while read i; do
+          echo $i; echo Line number $i
+        done
+#        jq -rc '.[]' <<< $(echo '${{ inputs.tags }}') | while read i; do
+#        jq -rc '.[]' <<< "${{ inputs.tags }}" | while read i; do
+#          echo $i
+#        done
+

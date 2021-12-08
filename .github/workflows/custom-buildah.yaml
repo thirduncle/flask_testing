@@ -1,0 +1,15 @@
+name: Build with buildah
+on:
+  push:
+    branches: [ buildah ]
+
+jobs:
+  build-and-push:
+    runs-on: [ ubuntu-latest ]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Registry login
+        uses: ./.github/actions/buildah
+        with:
+          tags: '["gha-0.1", "gha-0.2", "gha-0.3"]'
