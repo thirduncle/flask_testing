@@ -9,11 +9,21 @@ jobs:
   run-github-actions:
     runs-on: ubuntu-latest
     steps:
+        # By default the wd is: /home/runner/work/<repo-name>/<repo-name>
+        # but no files are present there by default. If need the files from
+        # the repo, we need to clone it first using the checkout action
       - name: List files and wd
         run: |
           pwd
           ls -la 
           uname -a
+        # Checkout the commit that triggerd the workflow to run
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: Get commit id
+        run: |
+          git log --oneline
+          echo $GITHUB_SHA
       - name: Simple JS Actions
         id: greet
         uses: actions/hello-world-javascript-action@v1
