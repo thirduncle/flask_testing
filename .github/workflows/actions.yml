@@ -1,0 +1,22 @@
+name: Actions Workflow
+
+on:
+  push:
+    branches:
+      - "testing"
+
+jobs:
+  run-github-actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Simple JS Actions
+        id: greet
+        uses: actions/hello-world-javascript-action@v1
+        # provide input
+        with:
+          who-to-greet: Tamtakos
+        # The previous step provides output. To reference it in the 
+        # next step, you need its id and the output it provides which
+        # can be found in the documentation of the action
+      - name: Log greeting time
+        run: echo "${{ steps.greet.outputs.time }}"
