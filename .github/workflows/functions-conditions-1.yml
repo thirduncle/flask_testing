@@ -1,0 +1,34 @@
+name: Conditional run
+
+on: 
+  push:
+    branches:
+      - "testing"
+  pull_request:
+    types: 
+      - opened
+    branches:
+      - "testing"
+
+
+jobs:
+  test_functions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check functions output
+        # The ${{ }} syntax declares an expression
+        run: |
+          echo ${{ contains('Hello', 'll') }}
+          echo ${{ startsWith('Hello', 'he') }}
+          echo ${{ endsWith('Hello', 'llo') }}
+          echo ${{ format('Hello {0} {1} {2}', 'World', '!', '!') }}
+
+  check_conditions:
+    runs-on: ubuntu-latest
+    # No need to use ${{ }} as whatever is used in the if is considered an expression
+    # We can use a condition from github context output e.g. "event_name": "push",
+    if: github.event_name == 'pull_request' && github.event.action == 'opened'
+    steps:
+      - name: Dump GitHub context
+        id: github_context_step
+        run: echo '${{ toJSON(github) }}'
