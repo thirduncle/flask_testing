@@ -24,6 +24,9 @@ jobs:
         run: |
           git log --oneline
           echo $GITHUB_SHA
+      - name: List files after checkout
+        run: |
+          ls -la 
       - name: Simple JS Actions
         id: greet
         uses: actions/hello-world-javascript-action@v1
