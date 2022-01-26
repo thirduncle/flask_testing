@@ -1,9 +1,11 @@
 name: Actions Workflow
 
 on:
-  push:
-    branches:
-      - "testing"
+  #push:
+  #  branches:
+  #    - "testing"
+  pull_request:
+    types: [assigned]
 
 jobs:
   run-github-actions:
