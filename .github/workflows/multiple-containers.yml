@@ -1,0 +1,33 @@
+name: container workflow
+
+on: 
+  push:
+    branches:
+      - "testing"
+
+# Instead of running the job directly on the runner VM,
+# we can run it in a container that runs inside the VM
+
+jobs:
+  node-docker:
+    runs-on: ubuntu-latest
+    # instead of having one container, we can have multiple 
+    # containers by using services, similar to what is done
+    # in docker compose
+    services: 
+      app:
+        image: alialaa17/node-api
+        ports:
+          - 3001:3000
+      mongo:
+        image: mongo
+        ports:
+          - 27017:27017
+    steps:
+      - name: POST a user
+        # localhost would be the runner vm
+        run: "curl -X POST http://localhost:3001/api/users
+        -H 'Content-Type: application/json' -d '
+        {\"username\":\"hello\",\"address\":\"here\"}'"
+      - name: Get user
+        run: curl http://localhost:3001/api/users
