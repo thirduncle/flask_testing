@@ -1,0 +1,36 @@
+name: Matrix wf
+
+on: 
+  push:
+    branches:
+      - "testing"
+
+jobs:
+  node-version:
+    strategy:
+      matrix:
+        # Choose key and value based on use-case - defined by user
+        node_version: [6, 8, 10] 
+        # We can add another key, for example OS, resulting in 9 runs 
+        # We also need to not hard-code the runs-on directive
+        os: [macos-latest, ubuntu-latest, windows-latest]
+      # The job will run 3 times for each node version
+      # If we want to stop the execution if one run fails
+      # we use fail-fast - by default it's true.
+      # If we want the others to run even if one run fails, use false
+      fail-fast: true
+      # By default the 3 jobs will run in parallel. We can limit this.
+      max-parallel: 2
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Log node version
+        run: node -v
+        # We want to change the default node version used by the vm
+      - uses: actions/setup-node@v1
+        with:
+          # The node version needs to be passed as a variable,
+          # getting its value from the matrix context on each run.
+          node-version: ${{ matrix.node_version }}
+      - name: Log node version again
+        run: node -v
+      
