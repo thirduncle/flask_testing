@@ -1,0 +1,20 @@
+name: Matrix wf
+
+on: 
+  push:
+    branches:
+      - "testing"
+
+jobs:
+  node-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log node version
+        run: node -v
+        # We want to change the default node version used by the vm
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 6
+      - name: Log node version again
+        run: node -v
+      
