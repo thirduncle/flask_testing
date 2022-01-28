@@ -1,0 +1,33 @@
+name: container workflow
+
+on: 
+  push:
+    branches:
+      - "testing"
+
+jobs:
+  docker-steps:
+    runs-on: ubuntu-latest
+    container:
+      image: node:10.18.0-jessie
+    steps:
+      - name: Get node version
+        run: node -v
+        # We can define a new container for a step with uses
+        # To override the entrypoint we can use the with
+      - name: Step with docker
+        uses: docker://node:12.14.1-alpine3.10
+        with:
+          # we don't need an array to override it
+          # we can just use the executable with
+          # extra args if needed
+          entrypoint: '/bin/echo'
+          args: 'Hello world'
+      - name: Another step with docker
+        uses: docker://node:12.14.1-alpine3.10
+        with:
+          # we don't need an array to override it
+          # we can just use the executable with
+          # extra args if needed
+          entrypoint: '/usr/local/bin/node'
+          args: '-v'

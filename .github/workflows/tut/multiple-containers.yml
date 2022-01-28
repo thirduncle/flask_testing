@@ -26,7 +26,7 @@ jobs:
     steps:
       - name: POST a user
         # localhost would be the runner vm
-        run: "curl -X POST http://localhost:3001/api/users
+        run: "curl -X POST http://localhost:3001/api/user
         -H 'Content-Type: application/json' -d '
         {\"username\":\"hello\",\"address\":\"here\"}'"
       - name: Get user
