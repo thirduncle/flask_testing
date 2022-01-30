@@ -1,0 +1,46 @@
+name: Actions Workflow
+
+on:
+  #push:
+  #  branches:
+  #    - "testing"
+  # As of now, 
+  # the shortest interval you can run scheduled workflows is once every 15 minutes
+  schedule:
+    - cron: "30 * * * *"
+  #pull_request:
+  #  types: [assigned]
+
+jobs:
+  run-github-actions:
+    runs-on: ubuntu-latest
+    steps:
+        # By default the wd is: /home/runner/work/<repo-name>/<repo-name>
+        # but no files are present there by default. If need the files from
+        # the repo, we need to clone it first using the checkout action
+      - name: List files and wd
+        run: |
+          pwd
+          ls -la 
+          uname -a
+        # Checkout the commit that triggerd the workflow to run
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: Get commit id
+        run: |
+          git log --oneline
+          echo $GITHUB_SHA
+      - name: List files after checkout
+        run: |
+          ls -la 
+      - name: Simple JS Actions
+        id: greet
+        uses: actions/hello-world-javascript-action@v1
+        # provide input
+        with:
+          who-to-greet: Tamtakos
+        # The previous step provides output. To reference it in the 
+        # next step, you need its id and the output it provides which
+        # can be found in the documentation of the action
+      - name: Log greeting time
+        run: echo "${{ steps.greet.outputs.time }}"

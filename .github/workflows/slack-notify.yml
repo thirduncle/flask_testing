@@ -1,0 +1,38 @@
+# Apart from overriding the entrypoint during a step
+# we can define our own entypoint to be executed via
+# a script
+
+name: container workflow
+
+on: 
+  push:
+    branches:
+      - "testing"
+
+jobs:
+  docker-steps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repo inside the container
+        uses: actions/checkout@v2      
+      - name: Make executable
+        run: |
+          chmod +x ./custom-entrypoint.sh
+          node -v
+          df  ./custom-entrypoint.sh
+      - name: Try with +x
+        uses: docker://node:12.14.1-alpine3.10
+        with:
+          # we don't need an array to override it
+          # we can just use the executable with
+          # extra args if needed
+          entrypoint: ./custom-entrypoint.sh
+          args: "from inside the custom entrypoint"
+      - name: Send Slack message
+        # https://hub.docker.com/r/technosophos/slack-notify/
+        uses: docker://technosophos/slack-notify:latest
+        env: 
+          # we need to put the webhook in a github secret. Not copy it directly from slack 
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_MESSAGE: "Hello from GHA"
+

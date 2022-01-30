@@ -1,0 +1,32 @@
+name: Shell Commands
+
+on:
+  push:
+    branches:
+      - "testing"
+
+
+jobs:
+  run-shell-commands:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo a string
+        run: echo "Hello from runner"
+      - name: multiline script
+        run: |
+          node -v
+          npm -v
+      - name: run python command
+        run: |
+          import platform
+          print(platform.processor())
+        shell: python
+  run-windows-command:
+    runs-on: windows-latest
+    needs: ["run-shell-commands"]
+    steps:
+      - name: Get directories in Powershell
+        run: Get-Location
+      - name: Get directories in Bash for Windows
+        run: pwd
+        shell: bash

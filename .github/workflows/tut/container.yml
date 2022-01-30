@@ -1,0 +1,22 @@
+name: container workflow
+
+on: 
+  push:
+    branches:
+      - "testing"
+
+# Instead of running the job directly on the runner VM,
+# we can run it in a container that runs inside the VM
+
+jobs:
+  node-docker:
+    runs-on: ubuntu-latest
+    # we can use more options for the container 
+    # as well as use a different container per step
+    container: 
+      image: node:13.5.0-alpine3.10
+    steps:
+      - name: Log node version
+        run: |
+          node -v
+          cat /etc/os-release

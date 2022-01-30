@@ -1,0 +1,24 @@
+name: Decrypt with gpg
+
+on:
+  push:
+    branches:
+      - "testing"
+
+
+jobs:
+  decrypt:
+    runs-on: ubuntu-latest 
+    steps:
+      - uses: actions/checkout@v2
+      - name: Decrypt file
+        env:
+          PASSPHRASE: ${{ secrets.PASSPHRASE }}
+        run: |
+          gpg --batch --yes --decrypt --passphrase="$PASSPHRASE" --output $HOME/test-secret-dec.json test-secret.json.gpg
+      - name: Show decrypted file
+        run: |
+          echo $HOME
+          ls -la $HOME
+          cat "$HOME"/test-secret-dec.json
+

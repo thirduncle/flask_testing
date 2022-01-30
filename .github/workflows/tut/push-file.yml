@@ -1,0 +1,32 @@
+name: Push file from vm to repo
+
+on:
+  push:
+    branches:
+      - "testing"
+
+
+jobs:
+  create_and_push:
+    runs-on: ubuntu-latest 
+    steps:
+      - name: List files before checkout
+        run: |
+          pwd
+          ls -la
+      - name: Checkout repo
+        run: |
+          git init 
+          git remote add origin "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git/"
+          git config --global user.email "a-bot@bot.com"
+          git config --global user.name "a-bot"
+          git fetch
+          git checkout master
+          git branch --set-upstream-to=origin/master
+          git pull
+          ls -la 
+          echo $RANDOM >> random.txt
+          ls -la
+          git add -A
+          git commit -m "Add random file"
+          git push

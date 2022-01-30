@@ -1,0 +1,44 @@
+# Apart from overriding the entrypoint during a step
+# we can define our own entypoint to be executed via
+# a script
+
+name: container workflow
+
+on: 
+  push:
+    branches:
+      - "testing"
+
+jobs:
+  docker-steps:
+    runs-on: ubuntu-latest
+    container:
+      image: node:10.18.0-jessie
+    steps:
+      - name: Get node version
+        run: |
+          node -v
+      - name: Clone repo inside the container
+        uses: actions/checkout@v2      
+      - name: Try without +x
+        uses: docker://node:12.14.1-alpine3.10
+        with:
+          # we don't need an array to override it
+          # we can just use the executable with
+          # extra args if needed
+          entrypoint: ./custom-entrypoint.sh
+          args: "from inside the custom entrypoint"
+        continue-on-error: true
+      - name: Make executable
+        run: |
+          chmod +x ./custom-entrypoint.sh
+          node -v
+          df  ./custom-entrypoint.sh
+      - name: Try with +x
+        uses: docker://node:12.14.1-alpine3.10
+        with:
+          # we don't need an array to override it
+          # we can just use the executable with
+          # extra args if needed
+          entrypoint: ./custom-entrypoint.sh
+          args: "from inside the custom entrypoint"
